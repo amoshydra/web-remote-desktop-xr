@@ -1,0 +1,18 @@
+version: "3.7"
+
+name: wrdxr
+services:
+  ome:
+    image: airensoft/ovenmediaengine:0.17.1
+    environment:
+      - OME_HOST_IP=127.0.0.1
+    ports:
+      - "1935:1935"
+      - "9999:9999/udp"
+      - "9000:9000"
+      - "3333-3334:3333-3334"
+      - "3478:3478"
+      - "10000-10009:10000-10009/udp"
+    volumes:
+      - ./.ome/conf:/opt/ovenmediaengine/bin/origin_conf
+      - ./.ome/logs:/var/log/ovenmediaengine

@@ -1,5 +1,5 @@
 {
-  "name": "vr-gallery",
+  "name": "web-remote-desktop-xr",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,8 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.5",
     "@react-three/fiber": "^8.17.10",
+    "@react-three/xr": "^6.4.9",
+    "@types/ovenplayer": "^0.10.12",
     "@types/three": "^0.170.0",
+    "ovenplayer": "^0.10.37",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "three": "^0.170.0"

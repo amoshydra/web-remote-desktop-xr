@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+.ome/logs/*
+.ome/conf/*
+!.ome/conf/Server.xml

@@ -1,50 +1,115 @@
-# React + TypeScript + Vite
+# Web Remote Desktop XR
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A proof of concept for a Web base local remote desktop environment for XR environment using WebRTC with WHIP.
 
-Currently, two official plugins are available:
+![Web Remote Desktop XR](./documents/header.jpg)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+## Getting started
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+This project is primarily created to provide a VR remote desktop environment for Linux environment.
 
-- Configure the top-level `parserOptions` property like this:
+It requires:
+- NodeJS
+- Docker / podman-compose
+- Open Broadcaster Software (OBS)
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Frontend client
+
+```bash 
+npm run dev -- --host 
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### OvenMediaEngine
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+docker compose up -d
 ```
+
+We use [OvenMediaEngine](https://airensoft.gitbook.io/ovenmediaengine/live-source/webrtc)'s WHIP (WebRTC-HTTP Ingestion Protocol) for WebRTC ingest.
+
+This will expose the following endpoints:
+
+- Clear - http://127.0.0.1:3333/app/stream?direction=whip
+- TLS - https://tls.domain.local:3334/app/stream?direction=whip (see [TLS configuration](#tls-configuration))
+
+
+### Broadcasting
+
+This guide uses OBS to capture the Desktop environment and stream it to the WHIP WebRTC ingest endpoint.
+
+#### Sources
+
+1. Configure a Screen Capture source.
+2. Select the source, right click and choose: "Resize output (source size)"
+
+#### Broadcast settings
+
+Open `Settings` > `Stream`:
+- Select service: WHIP
+- Server: http://127.0.0.1:3333/app/stream?direction=whip
+- Bearer Token: leave blank
+
+![OBS stream settings](documents/obs-settings-stream.png)
+
+Configure your audio / video and video encoding as followed:
+
+![OBS output settings](documents/obs-settings-output.png)
+
+The following encoder are tested working on Arch Linux on Wayland with a NVIDIA RTX graphic card:
+- x264 (CPU)
+- NVIDIA NVENC H.264 (GPU)
+
+#### CPU Encoding
+Sample encoder settings
+- Video Encoder: x264
+- Encoder Settings:
+  - Keyframe Interval: 1s
+  - CPU Usage Preset: ultrafast
+  - Profile: baseline / high
+  - Tune: zerolatency
+
+#### GPU Encoding
+
+Sample encoder settings for NVIDIA graphic card
+- Video Encoder: NVIDIA NVENC H.264
+- Encoder Settings:
+  - Keyframe Interval: 1s
+  - Preset: P1: Fastest (Lowest Quality)
+  - Tuning: Ultra Low Latency
+  - Profile: baseline / high
+
+### Start Streaming
+
+1. Confirm / Apply the settings,
+2. "Start Streaming"
+
+## Usage
+
+### Standalone Headset
+
+> **⚠️ Note - SSL required**  
+> Usage of WebXR and WebRTC outside of localhost requires SSL environment.  
+> If you are loading this onto a standalone headset such as Oculus Quest,
+> you will need to provision SSL certs for the NodeJS frontend client and for the OvenMediaEngine.
+
+Assuming SSL is configured the following endpoints:
+- Frontend - https://frontend.dev.localhost
+- OvenMediaEngine - wss://ome.dev.localhost:3334/app/stream
+
+On your standalone headset, open a XR capable Web Browser and go to:  
+https://frontend.dev.localhost?file=wss://ome.dev.localhost:3334/app/stream
+
+You should see your broadcasted source on the video player.
+
+Click "Open VR" to enter VR mode.
+
+### PC VR
+
+Using a WebXR capable browser, browse to:
+- http://127.0.0.1:5173?file=ws://127.0.0.1:3333/app/stream
+
+You should see your broadcasted source on the video player.
+
+Click "Open VR" to enter VR mode.
+
