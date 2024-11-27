@@ -12,12 +12,12 @@ const store = createXRStore({
 export interface EntryRef {
   enter: (mode: "ar" | "vr") => void;
 }
-export interface EntryProps {
+export interface EntryVirtualProps {
   webControlProps: UseWebControlReturn;
   innerRef: Ref<EntryRef>;
 }
 
-export const Entry = ({ webControlProps, innerRef } : EntryProps) => {
+export const EntryVirtual = ({ webControlProps, innerRef } : EntryVirtualProps) => {
   const [ready, setReady] = useState(false);
   useImperativeHandle<EntryRef, EntryRef>(innerRef, () => ({
     enter: (mode: "ar" | "vr") => {

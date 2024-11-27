@@ -1,6 +1,6 @@
 import { UseWebControlReturn } from "../components/WebControl";
-import { Controller } from "../Controller";
-import { Screen } from "../Screen";
+import { Controller } from "./Controller";
+import { Screen } from "./Screen";
 export interface MainSceneProps {
   webControlProps: UseWebControlReturn;
 }

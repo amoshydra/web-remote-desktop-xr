@@ -1,6 +1,6 @@
 import { MeshProps } from '@react-three/fiber';
 import { useState } from 'react';
-import { useRangeSliderUi } from './hooks/useRangeSlider';
+import { useRangeSliderUi } from '../hooks/useRangeSlider';
 
 const anchorScale = 0.05;
 

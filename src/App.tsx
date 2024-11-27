@@ -1,7 +1,7 @@
 import { useRef } from 'react';
-import { useWebControl, WebControl } from './components/WebControl';
-import { Entry, EntryRef } from './Virtual/Entry';
 import { OvenPlayerMain } from './components/OvenPlayer';
+import { useWebControl, WebControl } from './components/WebControl';
+import { EntryRef, EntryVirtual } from './EntryVirtual/EntryVirtual';
 
 function App() {
   const entryRef = useRef<EntryRef>(null);
@@ -30,7 +30,7 @@ function App() {
 
       <WebControl {...webControlProps} />
 
-      <Entry
+      <EntryVirtual
         webControlProps={webControlProps}
         innerRef={entryRef}
       />
