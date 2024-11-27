@@ -1,7 +1,7 @@
 import { useRef } from 'react';
-import "./components/ovenplayer";
 import { useWebControl, WebControl } from './components/WebControl';
 import { Entry, EntryRef } from './Virtual/Entry';
+import { OvenPlayerMain } from './components/OvenPlayer';
 
 function App() {
   const entryRef = useRef<EntryRef>(null);
@@ -22,12 +22,10 @@ function App() {
         >Enter AR</button>
       </div>
 
-      <oven-player-element
-        ref={(element) => {
-          webControlProps.setPlayer(element?.player || null)
-        }}
-        data-muted={`${webControlProps.muted}`}
-        data-file={webControlProps.file}
+      <OvenPlayerMain
+        innerRef={webControlProps.setPlayer}
+        defaultMuted={webControlProps.muted}
+        src={webControlProps.file}
       />
 
       <WebControl {...webControlProps} />

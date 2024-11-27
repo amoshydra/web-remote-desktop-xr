@@ -1,14 +1,14 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { mutedInitailizer, scaleInitailizer, sourceInitializer } from "../services/initializers";
-import { OvenPlayerElement } from "./ovenplayer";
 import { RangeSlider } from "./RangeSlider";
+import { OvenPlayerInstance } from "ovenplayer";
 
 export interface WebControlProps extends UseWebControlReturn {
 }
 
 export interface UseWebControlReturn {
-  player: OvenPlayerElement['player'];
-  setPlayer: React.Dispatch<React.SetStateAction<OvenPlayerElement['player'] | null>>
+  player: OvenPlayerInstance | null;
+  setPlayer: React.Dispatch<React.SetStateAction<OvenPlayerInstance | null>>
 
   file: string;
   scale: number;
@@ -30,21 +30,22 @@ const useQueryState = <T,>(initializer: { get: () => T; set: (v: T) => void }) =
 };
 
 export const useWebControl = (): UseWebControlReturn => {
-  const [player, setPlayer] = useState<OvenPlayerElement['player']>(null);
+  const [resetKey, setRefreshKey] = useState(Date.now());
+
+  const [player, setPlayer] = useState<OvenPlayerInstance | null>(null);
   const [scale, setScale] = useQueryState(scaleInitailizer);
   const [muted, setMuted] = useQueryState(mutedInitailizer);
   const [file] = useQueryState(sourceInitializer);
 
+  const computedFile = useMemo(() => {
+    const sourceFile = new URL(file);
+    sourceFile.searchParams.set("_refresh", Date.now().toString());
+    return sourceFile.href;
+  }, [file, resetKey]);
+
   const resetPlayback = useCallback(() => {
-    if (player) {
-      player.stop()
-      player.seek(player.getPosition() + 1000);
-      setTimeout(() => {
-        player.play();
-        player.setMute(muted);
-      });
-    }
-  }, [player, muted]);
+    setRefreshKey(k => k + 1);
+  }, []);
 
   const onMutedChange = useCallback((b: boolean) => {
     setMuted(b);
@@ -59,7 +60,7 @@ export const useWebControl = (): UseWebControlReturn => {
   return {
     player,
     setPlayer,
-    file,
+    file: computedFile,
     scale,
     onScaleChange,
     muted,

@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { UseWebControlReturn } from "../components/WebControl";
 import { Controller } from "../Controller";
 import { Screen } from "../Screen";
@@ -10,10 +9,6 @@ const spacing = -0.07;
 
 export const MainScene = (props: MainSceneProps) => {
   const { webControlProps } = props;
-
-  useEffect(() => {
-    webControlProps.resetPlayback();
-  }, [webControlProps.resetPlayback]);
 
   return (
     <>
