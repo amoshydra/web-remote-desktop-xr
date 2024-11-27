@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRangeSliderUi } from "../hooks/useRangeSlider";
 
 export interface RangeSliderProps {

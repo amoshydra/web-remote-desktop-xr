@@ -1,14 +1,13 @@
-import { MeshProps, Vector3 } from '@react-three/fiber';
-import * as THREE from 'three';
-import { useRangeSliderUi } from './hooks/useRangeSlider';
+import { MeshProps } from '@react-three/fiber';
 import { useState } from 'react';
+import { useRangeSliderUi } from './hooks/useRangeSlider';
 
 const anchorScale = 0.05;
 
-export interface ControllerProps extends MeshProps {
+export interface ControllerProps extends Omit<MeshProps, "position"> {
   onDistanceXChange?: (delta: number) => void;
   onClick?: () => void;
-  position: Vector3;
+  position: [number, number, number];
 }
 
 const noop = (() => {});

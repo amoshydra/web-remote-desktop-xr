@@ -1,7 +1,7 @@
 import { Canvas, useThree } from "@react-three/fiber";
 import { createXRStore, XR } from "@react-three/xr";
 import { Ref, useEffect, useImperativeHandle, useState } from "react";
-import { LinearToneMapping } from "three";
+import { LinearToneMapping, Mesh } from "three";
 import { UseWebControlReturn } from "../components/WebControl";
 import { MainScene } from "./MainScene";
 
@@ -40,11 +40,9 @@ export const Entry = ({ webControlProps, innerRef } : EntryProps) => {
       <XR store={store}>
         {
           ready && (
-            <>
-              <MainScene
-                webControlProps={webControlProps}
-              />
-            </>
+            <MainScene
+              webControlProps={webControlProps}
+            />
           )
         }
       </XR>
@@ -58,7 +56,7 @@ function ToneMapping() {
     gl.toneMapping = LinearToneMapping;
     gl.toneMappingExposure = 1;
     scene.traverse((object) => {
-      if ('material' in object) {
+      if (object instanceof Mesh) {
         object.material.needsUpdate = true;
       }
     });
