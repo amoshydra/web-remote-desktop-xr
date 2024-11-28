@@ -1,23 +1,32 @@
 import { faCircleNodes, faGear, faGlasses, faPanorama, faSliders, faVrCardboard } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useRef } from 'react';
-import { OvenPlayerMain } from '../../components/OvenPlayer';
-import { useWebControl, WebControl } from '../../components/WebControl';
-import { EntryRef, EntryVirtual } from '../../EntryVirtual/EntryVirtual';
+import { useRef, useState } from 'react';
+import { useWebControl } from '../../components/WebControl';
+import { EntryRef } from '../../EntryVirtual/EntryVirtual';
 import { AppShell } from '../Components/AppShell';
+import { Services } from '../Components/Services/Services';
 import { Sidebar } from '../Components/Sidebar';
 import { SidebarButton } from '../Components/SidebarButton';
 import { SidebarGroup } from '../Components/SidebarGroup';
+import { ViewLogonSubConnection } from './Logon.sub.Connection.view';
+import { ViewLogonSubControls } from './Logon.sub.Controls.view';
+import { ViewLogonSubSettings } from './Logon.sub.Settings.view';
+import { ViewLogonSubViewport } from './Logon.sub.Viewport.view';
 
-export interface ViewLogonProps {
-}
+export interface ViewLogonProps {}
 
 export const ViewLogon = () => {
-  const entryRef = useRef<EntryRef>(null);
+  const xrStoreRef = useRef<EntryRef>(null);
   const webControlProps = useWebControl();
+  const [videoRenderTarget, setVideoRenderTarget] = useState<HTMLElement | null>(null);
 
   return (
     <>
+      <Services
+        webControlProps={webControlProps}
+        videoRenderTarget={videoRenderTarget}
+        xrStoreRef={xrStoreRef}
+      />
       <AppShell
         sidebarSlot={
           <Sidebar 
@@ -42,33 +51,33 @@ export const ViewLogon = () => {
               <SidebarGroup>
                 <SidebarButton
                   startIconSlot={<FontAwesomeIcon icon={faVrCardboard} />}
-                  onClick={() => entryRef.current!.enter("vr")}
+                  onClick={() => xrStoreRef.current!.enter("vr")}
                 >Enter VR</SidebarButton>
                 <SidebarButton
                   startIconSlot={<FontAwesomeIcon icon={faGlasses} />}
-                  onClick={() => entryRef.current!.enter("ar")}
+                  onClick={() => xrStoreRef.current!.enter("ar")}
                 >Enter AR</SidebarButton>
               </SidebarGroup>
             }
           />
         }
       >
-        <OvenPlayerMain
-          className="w-full h-full object-contain bg-slate-200"
-          innerRef={webControlProps.setPlayer}
-          defaultMuted={webControlProps.muted}
-          src={webControlProps.file}
-        />
-
-        <WebControl {...webControlProps} />
+        {
+          [
+            ViewLogonSubConnection,
+            ViewLogonSubViewport,
+            ViewLogonSubControls,
+            ViewLogonSubSettings,
+          ].map((ViewLogonSubComponent) => {
+            return (
+              <ViewLogonSubComponent
+                webControlProps={webControlProps}
+                onVideoRenderReqeust={setVideoRenderTarget}
+              />
+            )
+          })
+        }
       </AppShell>
-      
-      <div className="fixed w-full h-full top-0 -z-1 opacity-0 pointer-events-none">
-        <EntryVirtual
-          webControlProps={webControlProps}
-          innerRef={entryRef}
-        />
-      </div>
     </>
   );
 };
