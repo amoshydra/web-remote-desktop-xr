@@ -13,11 +13,13 @@
     "@emotion/react": "^11.13.5",
     "@react-three/fiber": "^8.17.10",
     "@react-three/xr": "^6.4.9",
+    "@tailwindcss/vite": "4.0.0-beta.3",
     "@types/ovenplayer": "^0.10.12",
     "@types/three": "^0.170.0",
     "ovenplayer": "^0.10.37",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "tailwindcss": "4.0.0-beta.3",
     "three": "^0.170.0"
   },
   "devDependencies": {
