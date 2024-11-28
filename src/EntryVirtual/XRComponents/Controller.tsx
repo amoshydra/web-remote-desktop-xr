@@ -1,6 +1,6 @@
 import { MeshProps } from '@react-three/fiber';
 import { useState } from 'react';
-import { useRangeSliderUi } from '../hooks/useRangeSlider';
+import { useRangeSliderUi } from '../../hooks/useRangeSlider';
 
 const anchorScale = 0.05;
 
@@ -51,7 +51,7 @@ export function Controller(props: ControllerProps) {
         }}
       >
         <cylinderGeometry
-          args={[anchorScale/ 4, anchorScale/ 4, anchorScale / 2]}
+          args={[anchorScale/ 2, anchorScale/ 2, anchorScale / 2]}
         />
         <meshStandardMaterial
           color={color}

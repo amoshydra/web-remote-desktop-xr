@@ -1,11 +1,12 @@
-/** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
+import { classNames } from "../EntryFlat/utils/cssHelper";
 import { useRangeSliderUi } from "../hooks/useRangeSlider";
 
 export interface RangeSliderProps {
-  scale: number;
-  onScaleChange: (delta: number) => void;
+  value: number;
+  onValueChange: (newValue: number) => void;
+  children?: ReactNode;
+  className?: string;
 }
 
 export const RangeSlider = (props: RangeSliderProps) => {
@@ -16,13 +17,13 @@ export const RangeSlider = (props: RangeSliderProps) => {
     onPointerUp,
   } = useRangeSliderUi({
     onDeltaChange: (delta) => {
-      props.onScaleChange(props.scale + (0.0002 * delta));
+      props.onValueChange(delta);
     },
   });
 
   useEffect(() => {
     const pointerMove = (e: globalThis.PointerEvent) => {
-      onPointerMove(e.pointerId, e.clientX)
+      onPointerMove(e.pointerId, e.clientY)
     };
     const pointerUp = (e: globalThis.PointerEvent) => {
       onPointerUp(e.pointerId);
@@ -39,28 +40,31 @@ export const RangeSlider = (props: RangeSliderProps) => {
 
   return (
     <div
-      css={cssContainer}
+      className={
+        classNames(
+          `
+            rounded-md
+            shadow-inner
+
+            flex justify-center items-center
+            select-none touch-none
+
+            from-slate-200
+            hover:from-slate-200
+            active:from-slate-300
+            bg-gradient-to-t
+            to-neutral-200
+            hover:to-neutral-300
+            active:to-neutral-300
+          `,
+          props.className
+        )
+      }
       onPointerDown={(e) => {
-        onPointerDown(e.pointerId, e.clientX);
+        onPointerDown(e.pointerId, e.clientY);
       }}
-      data-is-dragging={isDragging.toString()}
     >
-      {(props.scale * 100).toFixed(2)}%
+      {props.children}
     </div>
   );
 };
-
-
-const cssContainer = css`
-  width: 100%;
-  height: 200px;
-  background: gray;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  user-select: none;
-  touch-action: none;
-  &[data-is-dragging="true"] {
-    background: maroon;
-  }
-`;

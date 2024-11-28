@@ -1,10 +1,11 @@
-import { useCallback, useMemo, useState } from "react";
-import { mutedInitailizer, scaleInitailizer, sourceInitializer } from "../services/initializers";
-import { RangeSlider } from "./RangeSlider";
 import { OvenPlayerInstance } from "ovenplayer";
+import { Dispatch, useCallback, useMemo, useState } from "react";
+import { mutedInitailizer, posXInitailizer, posYInitailizer, posZInitailizer, scaleInitailizer, sourceInitializer } from "../services/initializers";
 
 export interface WebControlProps extends UseWebControlReturn {
 }
+
+type DispatcherListener<T> = Dispatch<(prev: T) => T>;
 
 export interface UseWebControlReturn {
   player: OvenPlayerInstance | null;
@@ -12,21 +13,30 @@ export interface UseWebControlReturn {
 
   file: string;
   scale: number;
-  onScaleChange: (delta: number) => void;
+  x: number;
+  onXChange: DispatcherListener<number>;
+  y: number;
+  onYChange: DispatcherListener<number>;
+  z: number;
+  onZChange: DispatcherListener<number>;
+  onScaleChange: DispatcherListener<number>;
   muted: boolean;
-  onMutedChange: (muted: boolean) => void;
+  onMutedChange: DispatcherListener<boolean>;
   resetPlayback: () => void;
 }
 
 const useQueryState = <T,>(initializer: { get: () => T; set: (v: T) => void }) => {
   const [value, setValue] = useState(initializer.get);
-  return [
-    value,
-    (newValue: T) => {
+
+  const wrappedDispatcher: DispatcherListener<T> = (dispatchFn) => {
+    setValue((prevState) => {
+      const newValue = (dispatchFn as ((v: T) => T))(prevState);
       initializer.set(newValue);
-      setValue(newValue);
-    },
-  ] as const;
+      return newValue;
+    });
+  }
+
+  return [value, wrappedDispatcher] as const;
 };
 
 export const useWebControl = (): UseWebControlReturn => {
@@ -34,6 +44,9 @@ export const useWebControl = (): UseWebControlReturn => {
 
   const [player, setPlayer] = useState<OvenPlayerInstance | null>(null);
   const [scale, setScale] = useQueryState(scaleInitailizer);
+  const [x, setX] = useQueryState(posXInitailizer);
+  const [y, setY] = useQueryState(posYInitailizer);
+  const [z, setZ] = useQueryState(posZInitailizer);
   const [muted, setMuted] = useQueryState(mutedInitailizer);
   const [file] = useQueryState(sourceInitializer);
 
@@ -47,14 +60,20 @@ export const useWebControl = (): UseWebControlReturn => {
     setRefreshKey(k => k + 1);
   }, []);
 
-  const onMutedChange = useCallback((b: boolean) => {
-    setMuted(b);
-    player?.setMute(b);
+  const onMutedChange = useCallback((dispatchFn: ((prev: boolean) => boolean)) => {
+    setMuted((prevValue) => {
+      const newValue = dispatchFn(prevValue);
+      player?.setMute(newValue);
+      return newValue;
+    });
   }, [player, setMuted]);
 
-  const onScaleChange = useCallback((delta: number) => {
-    const newScale = Math.min(5, Math.max(0.05, delta));
-    setScale(newScale);
+  const onScaleChange = useCallback((dispatchFn: ((prev: number) => number)) => {
+    setScale((prevValue) => {
+      const newValue = dispatchFn(prevValue);
+      const constrainedScale = Math.min(0.001, Math.max(0.00001, newValue))
+      return constrainedScale;
+    });
   }, [setScale]);
 
   return {
@@ -63,18 +82,14 @@ export const useWebControl = (): UseWebControlReturn => {
     file: computedFile,
     scale,
     onScaleChange,
+    x,
+    onXChange: setX,
+    y,
+    onYChange: setY,
+    z,
+    onZChange: setZ,
     muted,
     onMutedChange,
     resetPlayback,
   }
-};
-
-export const WebControl = (props: WebControlProps) => {
-  return (
-    <div>
-      <RangeSlider 
-        {...props}
-      />
-    </div>
-  );
 };

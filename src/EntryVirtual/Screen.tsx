@@ -6,6 +6,9 @@ import { useCachedDimension } from '../hooks/useCachedDimension';
 
 interface ScreenProps extends MeshProps {
   scale: number;
+  x: number;
+  y: number;
+  z: number;
   videoElement?: HTMLVideoElement;
 }
 
@@ -51,14 +54,17 @@ const useVideo = (video: HTMLVideoElement | undefined) => {
   return [video, isPlaying] as const;
 };
 
-export function Screen(props: ScreenProps) {
-  const [video, isPlaying] = useVideo(props.videoElement);
-  const scale = 0.0035 * props.scale;
+export function Screen({
+  scale,
+  x, y, z,
+  videoElement,
+}: ScreenProps) {
+  const [video, isPlaying] = useVideo(videoElement);
   const anisotropy = 16;
 
   return (
     <group
-      position={[0, 0.95, -4]}
+      position={[x, y, z]}
       scale={[scale, scale, scale]}
     >
       <VideoPlane
