@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  three: ^0.170.0
+
 importers:
 
   .:
@@ -466,7 +469,7 @@ packages:
   '@pmndrs/xr@6.4.9':
     resolution: {integrity: sha512-hhFM6fcVXISDUe/HRTAhaHqRtBP6TIY2e5pH3WBeeeNSrNB9LG8HBOCQ6jP74k/c4v0+jfpm/XsVabU0Ci9aSQ==}
     peerDependencies:
-      three: '*'
+      three: ^0.170.0
 
   '@react-three/fiber@8.17.10':
     resolution: {integrity: sha512-S6bqa4DqUooEkInYv/W+Jklv2zjSYCXAhm6qKpAQyOXhTEt5gBXnA7W6aoJ0bjmp9pAeaSj/AZUoz1HCSof/uA==}
@@ -478,7 +481,7 @@ packages:
       react: '>=18.0'
       react-dom: '>=18.0'
       react-native: '>=0.64'
-      three: '>=0.133'
+      three: ^0.170.0
     peerDependenciesMeta:
       expo:
         optional: true
@@ -499,7 +502,7 @@ packages:
       '@react-three/fiber': '>=8'
       react: '>=18'
       react-dom: '>=18'
-      three: '*'
+      three: ^0.170.0
 
   '@rollup/rollup-android-arm-eabi@4.26.0':
     resolution: {integrity: sha512-gJNwtPDGEaOEgejbaseY6xMFu+CPltsc8/T+diUTTbOQLqD+bnrJq9ulH6WD69TqwqWmrfRAtUv30cCFZlbGTQ==}
@@ -1281,7 +1284,7 @@ packages:
   meshline@3.3.1:
     resolution: {integrity: sha512-/TQj+JdZkeSUOl5Mk2J7eLcYTLiQm2IDzmlSvYm7ov15anEcDJ92GHqqazxTSreeNgfnYu24kiEvvv0WlbCdFQ==}
     peerDependencies:
-      three: '>=0.137'
+      three: ^0.170.0
 
   meshoptimizer@0.18.1:
     resolution: {integrity: sha512-ZhoIoL7TNV4s5B6+rx5mC//fw8/POGyNxS/DZyCJeiZ12ScLfVwRE/GfsxwiTkMYYD5DmK2/JXnEVXqL4rF+Sw==}
@@ -1544,9 +1547,6 @@ packages:
 
   text-table@0.2.0:
     resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}
-
-  three@0.168.0:
-    resolution: {integrity: sha512-6m6jXtDwMJEK/GGMbAOTSAmxNdzKvvBzgd7q8bE/7Tr6m7PaBh5kKLrN7faWtlglXbzj7sVba48Idwx+NRsZXw==}
 
   three@0.170.0:
     resolution: {integrity: sha512-FQK+LEpYc0fBD+J8g6oSEyyNzjp+Q7Ks1C568WWaoMRLW+TkNNWmenWeGgJjV105Gd+p/2ql1ZcjYvNiPZBhuQ==}
@@ -2019,7 +2019,7 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       styled-components: 6.1.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      three: 0.168.0
+      three: 0.170.0
 
   '@jridgewell/gen-mapping@0.3.5':
     dependencies:
@@ -3094,8 +3094,6 @@ snapshots:
   tapable@2.2.1: {}
 
   text-table@0.2.0: {}
-
-  three@0.168.0: {}
 
   three@0.170.0: {}
 
