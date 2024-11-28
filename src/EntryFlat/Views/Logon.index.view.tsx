@@ -1,6 +1,8 @@
 import { faCircleNodes, faGear, faGlasses, faPanorama, faSliders, faVrCardboard } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
+import { Route, Router } from 'wouter';
+import { memoryLocation } from "wouter/memory-location";
 import { useWebControl } from '../../components/WebControl';
 import { EntryRef } from '../../EntryVirtual/EntryVirtual';
 import { AppShell } from '../Components/AppShell';
@@ -15,16 +17,16 @@ import { ViewLogonSubViewport } from './Logon.sub.Viewport.view';
 
 export interface ViewLogonProps {}
 
+const { hook, navigate } = memoryLocation();
+
 export const ViewLogon = () => {
   const xrStoreRef = useRef<EntryRef>(null);
   const webControlProps = useWebControl();
-  const [videoRenderTarget, setVideoRenderTarget] = useState<HTMLElement | null>(null);
 
   return (
     <>
       <Services
         webControlProps={webControlProps}
-        videoRenderTarget={videoRenderTarget}
         xrStoreRef={xrStoreRef}
       />
       <AppShell
@@ -35,15 +37,19 @@ export const ViewLogon = () => {
               <SidebarGroup>
                 <SidebarButton
                   startIconSlot={<FontAwesomeIcon icon={faCircleNodes} />}
+                  onClick={() => navigate("/logon/connection")}
                 >Connection</SidebarButton>
                 <SidebarButton
                   startIconSlot={<FontAwesomeIcon icon={faPanorama} />}
+                  onClick={() => navigate("/logon/viewport")}
                 >Viewport</SidebarButton>
                 <SidebarButton
                   startIconSlot={<FontAwesomeIcon icon={faSliders} />}
+                  onClick={() => navigate("/logon/controls")}
                 >Controls</SidebarButton>
                 <SidebarButton
                   startIconSlot={<FontAwesomeIcon icon={faGear} />}
+                  onClick={() => navigate("/logon/settings")}
                 >Settings</SidebarButton>
               </SidebarGroup>
             }
@@ -62,21 +68,25 @@ export const ViewLogon = () => {
           />
         }
       >
-        {
-          [
-            ViewLogonSubConnection,
-            ViewLogonSubViewport,
-            ViewLogonSubControls,
-            ViewLogonSubSettings,
-          ].map((ViewLogonSubComponent) => {
-            return (
-              <ViewLogonSubComponent
-                webControlProps={webControlProps}
-                onVideoRenderReqeust={setVideoRenderTarget}
-              />
-            )
-          })
-        }
+        <Router hook={hook}>
+          {
+            [
+              { path: "/", C: ViewLogonSubConnection, },
+              { path: "/logon/connection", C: ViewLogonSubConnection, },
+              { path: "/logon/viewport", C: ViewLogonSubViewport, },
+              { path: "/logon/controls", C: ViewLogonSubControls, },
+              { path: "/logon/settings", C: ViewLogonSubSettings, },
+            ].map(({ path, C: ViewLogonSubComponent }) => {
+              return (
+                <Route path={path} key={path}>
+                  <ViewLogonSubComponent
+                    webControlProps={webControlProps}
+                  />
+                </Route>
+              )
+            })
+          }
+        </Router>
       </AppShell>
     </>
   );
