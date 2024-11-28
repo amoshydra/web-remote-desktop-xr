@@ -100,6 +100,10 @@ Sample encoder settings for NVIDIA graphic card
 1. Confirm / Apply the settings,
 2. "Start Streaming"
 
+### Additianal reading for OME:
+- Access Control using Signed Policy - https://airensoft.gitbook.io/ovenmediaengine/access-control/signedpolicy
+
+
 ## Usage
 
 ### Standalone Headset
