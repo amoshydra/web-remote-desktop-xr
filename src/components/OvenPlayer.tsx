@@ -7,12 +7,12 @@ export interface OvenPlayerProps extends HTMLAttributes<HTMLElement> {
   src: string;
 }
 
-export const OvenPlayerMain = (props: OvenPlayerProps) => {
+export const OvenPlayerMain = ({ innerRef, src, defaultMuted, ...props }: OvenPlayerProps) => {
   const [playerElement, setPlayerElement] = useState<HTMLDivElement | null>(null);
   const [playerInstance, setPlayerInstance] = useState<OvenPlayerInstance | null>(null);
-  useImperativeHandle(props.innerRef, () => playerInstance);
+  useImperativeHandle(innerRef, () => playerInstance);
 
-  const setupMuteOptionRef = useAutoUnMute(playerInstance, props.defaultMuted);
+  const setupMuteOptionRef = useAutoUnMute(playerInstance, defaultMuted);
 
   useEffect(() => {
     if (playerElement) {
@@ -25,7 +25,7 @@ export const OvenPlayerMain = (props: OvenPlayerProps) => {
         autoStart: true,
         sources: [{
           type: "webrtc",
-          file: props.src,
+          file: src,
         }],
       });
       setPlayerInstance(player);
@@ -41,10 +41,13 @@ export const OvenPlayerMain = (props: OvenPlayerProps) => {
         playerElement.innerHTML = "";
       }
     };
-  }, [playerElement, props.src, setupMuteOptionRef]);
+  }, [playerElement, src, setupMuteOptionRef]);
 
   return (
-    <div data-player ref={setPlayerElement} />
+    <div
+      {...props}
+      ref={setPlayerElement}
+    />
   );
 };
 
