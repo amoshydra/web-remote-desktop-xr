@@ -1,5 +1,14 @@
+import { CanvasVideoRenderer } from "../Components/CanvasVideoRenderer";
 import { LogonSubViewProps } from "../Components/Logon/interface";
 
 export const ViewLogonSubViewport = (props: LogonSubViewProps) => {
-  return <div>View Logon Sub Viewport</div>
+  const videoElement = props.webControlProps.player?.getMediaElement();
+  return (
+    <div className="bg-neutral-950 w-full h-full">
+      <CanvasVideoRenderer
+        video={videoElement}
+        className="w-full"
+      />
+    </div>
+  )
 };

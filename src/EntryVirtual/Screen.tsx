@@ -1,7 +1,8 @@
 import { MeshProps } from '@react-three/fiber';
 import { AttachType } from '@react-three/fiber/dist/declarations/src/core/renderer';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as THREE from 'three';
+import { useCachedDimension } from '../hooks/useCachedDimension';
 
 interface ScreenProps extends MeshProps {
   scale: number;
@@ -69,21 +70,8 @@ export function Screen(props: ScreenProps) {
   );
 };
 
-const useCachedDimention = (video?: HTMLVideoElement) => {
-  const dimension = useRef({ width: 3840, height: 2160 });
-  const videoWidth = video?.videoWidth || 0;
-  const videoHeight = video?.videoHeight || 0;
-
-  if ((videoWidth + videoHeight) !== 0) {
-    dimension.current.width = videoWidth;
-    dimension.current.height = videoHeight;
-  };
-
-  return [dimension.current.width, dimension.current.height] as [number, number];
-}
-
 const VideoPlane = ({ video, anisotropy, isPlaying } : { isPlaying: boolean, video?: HTMLVideoElement, anisotropy: number }) => {
-  const retainingDimension = useCachedDimention(video);
+  const retainingDimension = useCachedDimension(video);
 
   return (
     <mesh>
