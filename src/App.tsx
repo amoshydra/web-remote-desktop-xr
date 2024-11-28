@@ -1,6 +1,6 @@
 import { useRef } from 'react';
-import { OvenPlayerMain } from './components/OvenPlayer';
-import { useWebControl, WebControl } from './components/WebControl';
+import { useWebControl } from './components/WebControl';
+import { EntryFlat } from './EntryFlat/EntryFlat';
 import { EntryRef, EntryVirtual } from './EntryVirtual/EntryVirtual';
 
 function App() {
@@ -9,27 +9,19 @@ function App() {
 
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', width: '100%', padding: '1rem' }}>
-        <button
-          onClick={() => {
-            entryRef.current!.enter("vr");
-          }}
-        >Enter VR</button>
-        <button
-          onClick={() => {
-            entryRef.current!.enter("ar");
-          }}
-        >Enter AR</button>
-      </div>
-
-      <OvenPlayerMain
-        innerRef={webControlProps.setPlayer}
-        defaultMuted={webControlProps.muted}
-        src={webControlProps.file}
+      <EntryFlat
+        onXrAction={(action) => {
+          switch (action) {
+            case "enter-vr": {
+              return entryRef.current!.enter("vr");
+            }
+            case "enter-ar": {
+              return entryRef.current!.enter("ar");
+            }
+          }
+        }}
+        webControlProps={webControlProps}
       />
-
-      <WebControl {...webControlProps} />
-
       <EntryVirtual
         webControlProps={webControlProps}
         innerRef={entryRef}
