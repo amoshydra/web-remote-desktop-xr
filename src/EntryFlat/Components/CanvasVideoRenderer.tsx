@@ -6,18 +6,17 @@ export interface CanvasVideoRendererProps extends HTMLAttributes<HTMLCanvasEleme
 }
 
 export const CanvasVideoRenderer = ({ video, ...props }: CanvasVideoRendererProps) => {
-  const isActiveRef = useRef(false);
-
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [videoWidth, videoHeight] = useCachedDimension(video);
 
   useEffect(() => {
-    isActiveRef.current = true;
     const canvasElement = canvasRef.current!;
     const context = canvasElement.getContext("2d", { alpha: false })!;
 
+    let isActive = true;
+
     const renderFrame = () => {
-      if (!isActiveRef.current) return;
+      if (!isActive) return;
 
       if (video) {
         const cw = Math.floor(videoWidth);
@@ -30,7 +29,7 @@ export const CanvasVideoRenderer = ({ video, ...props }: CanvasVideoRendererProp
     };
     requestAnimationFrame(renderFrame);
     return () => {
-      isActiveRef.current = false;
+      isActive = false;
     }
   }, [video, videoHeight, videoWidth]);
 

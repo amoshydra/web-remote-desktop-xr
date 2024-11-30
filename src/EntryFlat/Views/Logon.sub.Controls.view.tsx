@@ -1,6 +1,7 @@
 import { RangeSlider } from "../../components/RangeSlider";
 import { Button } from "../Components/Button";
 import { LogonSubViewProps } from "../Components/Logon/interface";
+import { LogonContainer } from "../Components/Logon/LogonContainer";
 
 export const ViewLogonSubControls = (props: LogonSubViewProps) => {
   const {
@@ -20,8 +21,8 @@ export const ViewLogonSubControls = (props: LogonSubViewProps) => {
   } = props.webControlProps;
 
   return (
-    <div className="flex flex-col gap-4 p-8">
-      <p>Virtual Screen controls in XR</p>
+    <LogonContainer className="flex flex-col gap-4 ">
+      <p className="pt-0">Virtual Screen controls in XR</p>
       <div className="flex justify-between">
         <div className="flex gap-4 flex-grow">
           <RangeSlider
@@ -69,8 +70,13 @@ export const ViewLogonSubControls = (props: LogonSubViewProps) => {
           <Button onClick={resetPlayback}>
             Reset Player
           </Button>
+          <Button onClick={() => {
+            props.obsProps.request("ToggleStream")
+          }}>
+            Toggle stream
+          </Button>
         </div>
       </div>
-    </div>
+    </LogonContainer>
   )
 };

@@ -5,6 +5,7 @@ import { Route, Router } from 'wouter';
 import { memoryLocation } from "wouter/memory-location";
 import { useWebControl } from '../../components/WebControl';
 import { EntryRef } from '../../EntryVirtual/EntryVirtual';
+import { useObs } from '../../hooks/useObs';
 import { AppShell } from '../Components/AppShell';
 import { Services } from '../Components/Services/Services';
 import { Sidebar } from '../Components/Sidebar';
@@ -22,6 +23,7 @@ const { hook, navigate } = memoryLocation();
 export const ViewLogon = () => {
   const xrStoreRef = useRef<EntryRef>(null);
   const webControlProps = useWebControl();
+  const obsProps = useObs();
 
   return (
     <>
@@ -80,6 +82,7 @@ export const ViewLogon = () => {
               return (
                 <Route path={path} key={path}>
                   <ViewLogonSubComponent
+                    obsProps={obsProps}
                     webControlProps={webControlProps}
                   />
                 </Route>
