@@ -10,6 +10,7 @@ export interface UseObsReturn {
   outputSettings: any[];
   profiles: any[];
   request: typeof obs.call
+  requestBatch: typeof obs.callBatch
 }
 
 let connectionPromiseChain = Promise.resolve();
@@ -24,7 +25,8 @@ export const useObs = (): UseObsReturn => {
     isConnected,
     outputSettings,
     profiles,
-    request: (...args) => connectionPromiseChain.then(() => obs.call(...args))
+    request: (...args) => connectionPromiseChain.then(() => obs.call(...args)),
+    requestBatch: (...args) => connectionPromiseChain.then(() => obs.callBatch(...args)),
   };
 }
 
