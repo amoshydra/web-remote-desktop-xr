@@ -7,7 +7,7 @@ const anchorScale = 0.05;
 export interface ControllerProps extends Omit<MeshProps, "position"> {
   onDistanceXChange?: (delta: number) => void;
   onClick?: () => void;
-  position: [number, number, number];
+  position?: [number, number, number];
 }
 
 const noop = (() => {});
@@ -25,7 +25,7 @@ export function Controller(props: ControllerProps) {
   const [isHover, setIsHover] = useState(false);
 
   const color = isDragging ? "maroon" : isHover ? "lightgray" : "gray";
-  const [anchorX, anchorY, anchorZ] = props.position;
+  const [anchorX, anchorY, anchorZ] = props.position || [0, 0, 0];
 
   return (
     <group>
