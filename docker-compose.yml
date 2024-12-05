@@ -2,8 +2,15 @@ version: "3.7"
 
 name: wrdxr
 services:
+  task-create-cert:
+    image: docker.io/alpine:latest
+    working_dir: /workdir/scripts
+    volumes:
+      - ./services/task-create-cert:/workdir/scripts
+      - ./services/nginx/certs:/workdir/certs
+    command: ["/bin/sh", "./create.sh"]
   ome:
-    image: airensoft/ovenmediaengine:0.17.1
+    image: docker.io/airensoft/ovenmediaengine:0.17.1
     environment:
       - OME_HOST_IP=127.0.0.1
     ports:
@@ -14,5 +21,25 @@ services:
       - "3478:3478"
       - "10000-10009:10000-10009/udp"
     volumes:
-      - ./.ome/conf:/opt/ovenmediaengine/bin/origin_conf
-      - ./.ome/logs:/var/log/ovenmediaengine
+      - ./services/ovenmediaengine/conf:/opt/ovenmediaengine/bin/origin_conf
+      - ./services/ovenmediaengine/logs:/var/log/ovenmediaengine
+
+  nginx:
+    image: docker.io/nginx:mainline-alpine
+    volumes:
+      - ./services/nginx/certs/server.crt:/etc/ssl/certs/server.crt:ro
+      - ./services/nginx/certs/server.key:/etc/ssl/certs/server.key:ro
+      - ./services/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./services/nginx/conf.d:/etc/nginx/conf.d:ro
+    ports:
+      # Frontend
+      - "10080:80"
+      - "10081:443"  
+      # OvenMediaEngine
+      - "10082:3333"
+      - "10083:3334"
+      # OBS WebSocket
+      - "10084:4455"
+      - "10085:4456"
+    depends_on:
+      - task-create-cert

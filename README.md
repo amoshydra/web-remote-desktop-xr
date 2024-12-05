@@ -30,10 +30,8 @@ We use [OvenMediaEngine](https://airensoft.gitbook.io/ovenmediaengine/live-sourc
 
 This will expose the following endpoints:
 
-- Clear - http://127.0.0.1:3333/app/stream?direction=whip
-- TLS - https://local-dev-domain.localhost:3334/app/stream?direction=whip
-
-See: [OvenMediaEngine >Configuration > TLS Encryption](https://airensoft.gitbook.io/ovenmediaengine/configuration/tls-encryption)
+- Clear - http://127.0.0.1:10080/app/stream?direction=whip
+- TLS - https://127.0.0.1:10081/app/stream?direction=whip
 
 ### Broadcasting
 
@@ -63,7 +61,7 @@ Output size is currently limited to 4096x4096 due to the usage of H264 encoder. 
 
 Open `Settings` > `Stream`:
 - Select service: WHIP
-- Server: http://127.0.0.1:3333/app/stream?direction=whip
+- Server: http://127.0.0.1:10082/app/stream?direction=whip
 - Bearer Token: leave blank
 
 ![OBS stream settings](documents/obs-settings-stream.png)
@@ -116,6 +114,19 @@ If you are loading this onto a standalone headset such as Oculus Quest, you will
 - Option 2: provide a local DNS server that resolve your application IP address to a `*.localhost` URL.
 
 ##### Option 1:
+
+This project generate a self-signed TLS certificate when you run `docker-compose up -d`
+
+Via the `docker-compose up -d`,  
+
+The following ports are running in secure protocols:
+
+| Type | URL |
+| -- | -- |
+| Frontend        | https://127.0.0.1:10081
+| OvenMediaEngine | https://127.0.0.1:10083
+| OBS WebSocket   | https://127.0.0.1:10085
+
 Assuming SSL is configured for the following endpoints:
 - Frontend - `https://frontend.dev.localhost`
 - OvenMediaEngine - `wss://ome.dev.localhost:3334/app/stream`
