@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "types": [
+      "node"
+    ],
+    "target": "ESNext",
+    "module": "NodeNext",
+    "noEmit": true,
+    "strict": true
+  },
+  "include": [
+    "./**/*.mjs"
+  ]
+}
