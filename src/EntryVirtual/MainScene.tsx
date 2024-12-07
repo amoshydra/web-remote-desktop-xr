@@ -1,13 +1,15 @@
 import { UseWebControlReturn } from "../components/WebControl";
+import { UseObsReturn } from "../hooks/useObs";
 import { Controls } from "./Controls";
-import { Screen } from "./Screen";
+import { Screen } from "./Screen/Screen";
 
 export interface MainSceneProps {
   webControlProps: UseWebControlReturn;
+  obsProps: UseObsReturn;
 }
 
 export const MainScene = (props: MainSceneProps) => {
-  const { webControlProps } = props;
+  const { webControlProps, obsProps } = props;
 
   return (
     <>
@@ -22,11 +24,8 @@ export const MainScene = (props: MainSceneProps) => {
         intensity={1}
       />
       <Screen
-        x={webControlProps.x}
-        y={webControlProps.y}
-        z={webControlProps.z}
-        scale={webControlProps.scale}
-        videoElement={webControlProps.player?.getMediaElement()}
+        webControlProps={webControlProps}
+        obsProps={obsProps}
       />
     </>
   )

@@ -11,6 +11,9 @@ export interface UseWebControlReturn {
   player: OvenPlayerInstance | null;
   setPlayer: React.Dispatch<React.SetStateAction<OvenPlayerInstance | null>>
 
+  streamType: boolean;
+  onStreamTypeChange: DispatcherListener<boolean>;
+
   file: string;
   scale: number;
   x: number;
@@ -43,6 +46,7 @@ export const useWebControl = (): UseWebControlReturn => {
   const [resetKey, setRefreshKey] = useState(Date.now());
 
   const [player, setPlayer] = useState<OvenPlayerInstance | null>(null);
+  const [streamType, setStreamType] = useState(false);
   const [scale, setScale] = useQueryState(scaleInitailizer);
   const [x, setX] = useQueryState(posXInitailizer);
   const [y, setY] = useQueryState(posYInitailizer);
@@ -79,6 +83,8 @@ export const useWebControl = (): UseWebControlReturn => {
   return {
     player,
     setPlayer,
+    streamType,
+    onStreamTypeChange: setStreamType,
     file: computedFile,
     scale,
     onScaleChange,

@@ -16,7 +16,7 @@ import { ViewLogonSubControls } from './Logon.sub.Controls.view';
 import { ViewLogonSubSettings } from './Logon.sub.Settings.view';
 import { ViewLogonSubViewport } from './Logon.sub.Viewport.view';
 
-export interface ViewLogonProps {}
+export interface ViewLogonProps { }
 
 const { hook, navigate } = memoryLocation();
 
@@ -30,10 +30,11 @@ export const ViewLogon = () => {
       <Services
         webControlProps={webControlProps}
         xrStoreRef={xrStoreRef}
+        obsProps={obsProps}
       />
       <AppShell
         sidebarSlot={
-          <Sidebar 
+          <Sidebar
             headerSlot={<span />}
             children={
               <SidebarGroup>
