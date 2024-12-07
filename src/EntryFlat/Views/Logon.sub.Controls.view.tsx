@@ -5,6 +5,10 @@ import { LogonContainer } from "../Components/Logon/LogonContainer";
 
 export const ViewLogonSubControls = (props: LogonSubViewProps) => {
   const {
+
+    streamType,
+    onStreamTypeChange,
+
     scale,
     onScaleChange,
     muted,
@@ -74,6 +78,9 @@ export const ViewLogonSubControls = (props: LogonSubViewProps) => {
             props.obsProps.request("ToggleStream")
           }}>
             Toggle stream
+          </Button>
+          <Button onClick={() => onStreamTypeChange(b => !b)}>
+            {streamType ? "Use live" : "Use fallback"}
           </Button>
         </div>
       </div>

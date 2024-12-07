@@ -58,6 +58,12 @@ export const Controls = (props: ControlsProps) => {
               webControlProps.onMutedChange(b => !b);
             }}
           />
+          <Controller
+            key="streamtype"
+            onClick={() => {
+              webControlProps.onStreamTypeChange(b => !b);
+            }}
+          />
         </Flex>
       </Flex>
     </Disclousure>
