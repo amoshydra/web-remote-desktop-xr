@@ -1,15 +1,11 @@
-import { useFrame } from "@react-three/fiber";
 
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { CanvasTexture, LinearFilter, SRGBColorSpace } from "three";
-import { usePollRenderer } from "../../EntryFlat/Components/ViewportFallbackRenderer/usePollRenderer";
-import { UseObsReturn } from "../../hooks/useObs";
+import { useSocketPushRenderer } from "../../EntryFlat/Components/ViewportFallbackRenderer/useSocketPushRenderer";
 
-export interface ObsCanvasScreenProps {
-  obsProps: UseObsReturn;
-}
+export interface ObsCanvasScreenProps {}
 
-export const ObsCanvasScreen = ({ obsProps }: ObsCanvasScreenProps) => {
+export const ObsCanvasScreen = (_p: ObsCanvasScreenProps) => {
   const textureRef = useRef<CanvasTexture | null>(null);
   const [canvasWidth, setCanvasWidth] = useState(1000);
   const [canvasHeight, setCanvasHeight] = useState(1000);
@@ -20,30 +16,20 @@ export const ObsCanvasScreen = ({ obsProps }: ObsCanvasScreenProps) => {
     return canvas;
   }, [])
 
-  const poll = usePollRenderer(obsProps, canvasElement);
+  const draw = useCallback((canvas: HTMLCanvasElement) => {
+    const texture = textureRef.current;
+    setCanvasWidth(canvas.width);
+    setCanvasHeight(canvas.height);
 
-  const update = useMemo(() => {
-    if (ready) {
-      return () => {
-        return poll(() => {
-          const texture = textureRef.current!;
-          texture.needsUpdate = true;
-        })
-      }
-    }
-    return () => poll((canvas) => {
-      setReady(true);
-      const texture = textureRef.current;
-      setCanvasWidth(canvas.width);
-      setCanvasHeight(canvas.height);
-      if (!texture) return;
-      texture.needsUpdate = true;
-    });
-  }, [ready, poll]);
+    setReady(true);
 
-  useFrame(update);
+    if (!texture) return;
+    texture.needsUpdate = true;
+  }, []);
 
-  if (!ready) return null;
+  useSocketPushRenderer(canvasElement, draw);
+
+  if (!ready) return false;
 
   return (
     <mesh>

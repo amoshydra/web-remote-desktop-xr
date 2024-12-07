@@ -1,15 +1,13 @@
 import { UseWebControlReturn } from "../components/WebControl";
-import { UseObsReturn } from "../hooks/useObs";
 import { Controls } from "./Controls";
 import { Screen } from "./Screen/Screen";
 
 export interface MainSceneProps {
   webControlProps: UseWebControlReturn;
-  obsProps: UseObsReturn;
 }
 
 export const MainScene = (props: MainSceneProps) => {
-  const { webControlProps, obsProps } = props;
+  const { webControlProps } = props;
 
   return (
     <>
@@ -25,7 +23,6 @@ export const MainScene = (props: MainSceneProps) => {
       />
       <Screen
         webControlProps={webControlProps}
-        obsProps={obsProps}
       />
     </>
   )

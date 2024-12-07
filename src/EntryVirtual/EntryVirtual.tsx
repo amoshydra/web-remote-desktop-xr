@@ -3,7 +3,6 @@ import { createXRStore, XR } from "@react-three/xr";
 import { Ref, useEffect, useImperativeHandle, useState } from "react";
 import { LinearToneMapping, Mesh } from "three";
 import { UseWebControlReturn } from "../components/WebControl";
-import { UseObsReturn } from "../hooks/useObs";
 import { MainScene } from "./MainScene";
 
 const store = createXRStore({
@@ -16,10 +15,9 @@ export interface EntryRef {
 export interface EntryVirtualProps {
   webControlProps: UseWebControlReturn;
   innerRef: Ref<EntryRef>;
-  obsProps: UseObsReturn;
 }
 
-export const EntryVirtual = ({ webControlProps, innerRef, obsProps }: EntryVirtualProps) => {
+export const EntryVirtual = ({ webControlProps, innerRef }: EntryVirtualProps) => {
   const [ready, setReady] = useState(false);
 
   useImperativeHandle<EntryRef, EntryRef>(innerRef, () => ({
@@ -45,7 +43,6 @@ export const EntryVirtual = ({ webControlProps, innerRef, obsProps }: EntryVirtu
           ready && (
             <MainScene
               webControlProps={webControlProps}
-              obsProps={obsProps}
             />
           )
         }

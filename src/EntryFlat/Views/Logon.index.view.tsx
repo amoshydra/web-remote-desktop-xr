@@ -30,7 +30,6 @@ export const ViewLogon = () => {
       <Services
         webControlProps={webControlProps}
         xrStoreRef={xrStoreRef}
-        obsProps={obsProps}
       />
       <AppShell
         sidebarSlot={

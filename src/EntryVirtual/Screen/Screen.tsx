@@ -1,16 +1,13 @@
 import { MeshProps } from '@react-three/fiber';
 import { UseWebControlReturn } from '../../components/WebControl';
-import { UseObsReturn } from '../../hooks/useObs';
 import { ObsCanvasScreen } from './ObsCanvasScreen';
 import { VideoScreen } from './VideoScreen';
 
 interface ScreenProps extends MeshProps {
-  obsProps: UseObsReturn;
   webControlProps: UseWebControlReturn;
 }
 
 export function Screen({
-  obsProps,
   webControlProps
 }: ScreenProps) {
   const { scale: scaleValue, x, y, z, player, streamType } = webControlProps;
@@ -25,9 +22,7 @@ export function Screen({
       {
         streamType
           ? (
-            <ObsCanvasScreen
-              obsProps={obsProps}
-            />
+            <ObsCanvasScreen />
           ) : (
             <VideoScreen
               video={player?.getMediaElement()}
