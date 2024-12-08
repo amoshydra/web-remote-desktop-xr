@@ -1,0 +1,7 @@
+{
+  "name": "@wrdxr-app/events",
+  "type": "module",
+  "main": "index.mjs",
+  "types": "index.d.ts",
+  "private": true
+}

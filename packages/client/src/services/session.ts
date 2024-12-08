@@ -1,20 +1,21 @@
 
+import { Events } from "@wrdxr-app/events";
 import { io } from "socket.io-client";
 
 const socket = io();
 
 const obsScreen = {
   join() {
-    socket.emit("obs-screen:join");
+    socket.emit(Events.ObsScreen.Join);
   },
   exit() {
-    socket.emit("obs-screen:exit");
+    socket.emit(Events.ObsScreen.Exit);
   },
   onOutput(handler: (buffer: ArrayBuffer) => void) {
-    socket.on("obs-screen:output", handler)
+    socket.on(Events.ObsScreen.Output, handler)
   },
   offOutput(handler: (buffer: ArrayBuffer) => void) {
-    socket.off("obs-screen:output", handler)
+    socket.off(Events.ObsScreen.Output, handler)
   },
 }
 

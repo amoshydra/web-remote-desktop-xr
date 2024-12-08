@@ -1,3 +1,4 @@
+import { Events } from "@wrdxr-app/events";
 import express from "express";
 import ViteExpress from "vite-express";
 import routerApi from "./router/api.mjs";
@@ -13,11 +14,11 @@ const port = parseInt(process.env.PORT ?? "5173", 10);
 const server = ViteExpress.listen(app, port, () => console.log(`Server is listening at port ${port}...`));
 
 sessionSocketService.init(server, {
-  connection: ({ id }) => console.log(`user ${id} connected`),
-  disconnect: ({ id }) => {
+  [Events.Core.Connection]: ({ id }) => console.log(`user ${id} connected`),
+  [Events.Core.Disconnect]: ({ id }) => {
     obsScreenSession.fallbackScreenshare.exit(id);
     console.log(`user ${id} disconnected`);
   },
-  "obs-screen:join": ({ id }) => obsScreenSession.fallbackScreenshare.join(id),
-  "obs-screen:exit": ({ id }) => obsScreenSession.fallbackScreenshare.exit(id),
+  [Events.ObsScreen.Join]: ({ id }) => obsScreenSession.fallbackScreenshare.join(id),
+  [Events.ObsScreen.Exit]: ({ id }) => obsScreenSession.fallbackScreenshare.exit(id),
 });

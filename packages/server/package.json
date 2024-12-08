@@ -4,6 +4,7 @@
   "module": "index.mjs",
   "private": true,
   "dependencies": {
+    "@wrdxr-app/events": "link:../events",
     "data-uri-to-buffer": "^6.0.2",
     "eventemitter3": "^5.0.1",
     "express": "^4.21.2",
