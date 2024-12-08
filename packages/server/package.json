@@ -1,0 +1,19 @@
+{
+  "name": "@wrdxr-app/server",
+  "type": "module",
+  "module": "index.mjs",
+  "private": true,
+  "dependencies": {
+    "data-uri-to-buffer": "^6.0.2",
+    "eventemitter3": "^5.0.1",
+    "express": "^4.21.2",
+    "nodemon": "^3.1.7",
+    "obs-websocket-js": "^5.0.6",
+    "socket.io": "^4.8.1",
+    "vite-express": "^0.20.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.1"
+  }
+}
