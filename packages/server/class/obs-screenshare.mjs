@@ -1,8 +1,6 @@
 import { request } from "../services/obs.mjs";
 import { Loop } from "./loop.mjs";
 
-const screenshotSavePath = process.env.VITE_WRDXR_OBS_SCREENSHOT_SAVE_PATH || "";
-
 export class ObsScreenshare {
   running = false;
 
