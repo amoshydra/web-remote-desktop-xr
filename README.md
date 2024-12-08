@@ -14,16 +14,17 @@ It requires:
 - Docker / podman-compose
 - Open Broadcaster Software (OBS)
 
-### Frontend client
-
 ```bash 
-npm run dev -- --host 
+docker compose up -d # starts nginx and OvenMediaEngine
+npm start # start the NodeJS backend and frontend server
 ```
 
 ### OvenMediaEngine
 
+OvenMediaEngine will be started as part of the docker-compose services
+
 ```bash
-docker compose up -d
+docker compose logs -f ome
 ```
 
 We use [OvenMediaEngine](https://airensoft.gitbook.io/ovenmediaengine/live-source/webrtc)'s WHIP (WebRTC-HTTP Ingestion Protocol) for WebRTC ingest.
@@ -113,11 +114,11 @@ If you are loading this onto a standalone headset such as Oculus Quest, you will
 - Option 1: provision SSL certs for the NodeJS frontend client and for the OvenMediaEngine
 - Option 2: provide a local DNS server that resolve your application IP address to a `*.localhost` URL.
 
+The guide below shows usage example using option 1.
+
 ##### Option 1:
 
 This project generate a self-signed TLS certificate when you run `docker-compose up -d`
-
-Via the `docker-compose up -d`,  
 
 The following ports are running in secure protocols:
 
@@ -127,21 +128,29 @@ The following ports are running in secure protocols:
 | OvenMediaEngine | https://127.0.0.1:10083
 | OBS WebSocket   | https://127.0.0.1:10085
 
-Assuming SSL is configured for the following endpoints:
-- Frontend - `https://frontend.dev.localhost`
-- OvenMediaEngine - `wss://ome.dev.localhost:3334/app/stream`
+Assuming both client and server are on the same network:
+- server: 192.168.1.234 (This server)
+- client: 192.168.1.100 (Your VR standalone headset)
+
+You can find out your server ip using `ip a | grep "inet "`
+
+Your SSL endpoints should look like this:
+- Frontend - `https://192.168.1.234:10081`
+- OvenMediaEngine - `wss://192.168.1.234:10083/app/stream`
+
+You may create a `.env.local` with the following content:
+
+```ini
+VITE_WRDXR_DEFAULT_FILE=wss://192.168.1.234:10083/app/stream
+
+VITE_WRDXR_OBS_WEBSOCKET=wss://192.168.1.234:10085
+VITE_WRDXR_OBS_WEBSOCKET_PASSWORD=check-your-obs-setting
+```
 
 On your standalone headset, open a WebXR capable web browser and go to:  
-https://frontend.dev.localhost?file=wss://ome.dev.localhost:3334/app/stream
+https://192.168.1.234:10081/?file=wss://192.168.1.234:10083/app/stream
 
-##### Option 2:
-Without SSL, assuming your DNS record is configured for the following endpoints:
-
-- Frontend - `http://wrdxr.dev.localhost`
-- OvenMediaEngine - `ws://wrdxr.dev.localhost:3333/app/stream`
-
-On your standalone headset, open a WebXR capable web browser and go to:  
-http://wrdxr.localhost?file=ws://wrdxr.localhost:3333/app/stream
+Accept the warning about the SSL self-signed certificate
 
 You should see your broadcasted source on the video player.
 
@@ -152,7 +161,7 @@ Click "Open VR" to enter VR mode.
 ### PC VR
 
 Using a WebXR capable browser, browse to:
-- http://127.0.0.1:5173?file=ws://127.0.0.1:3333/app/stream
+- https://127.0.0.1:10081?file=wss://127.0.0.1:10083/app/stream
 
 You should see your broadcasted source on the video player.
 
