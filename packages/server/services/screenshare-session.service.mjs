@@ -13,8 +13,12 @@ obsScreenshare.loop.TICK_RATE = 60;
 
 const room = new Room();
 // Automatically stop streaming when all clients have left
-room.on("end", () => {
-  request("StopStream");
+room.on("end", async () => {
+  try {
+    await request("StopStream");
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 const obsScreenshareRoom = new Room();
