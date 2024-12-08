@@ -15,10 +15,11 @@ const server = ViteExpress.listen(app, port, () => console.log(`Server is listen
 
 sessionSocketService.init(server, {
   [Events.Core.Connection]: ({ id, handshake: { headers: { "user-agent": ua } } }) => {
+    obsScreenSession.join(id);
     console.log(`[${sessionSocketService.map.size + 1}]    connected - ${id} - ${ua}`);
   },
   [Events.Core.Disconnect]: ({ id }) => {
-    obsScreenSession.fallbackScreenshare.exit(id);
+    obsScreenSession.exit(id);
     console.log(`[${sessionSocketService.map.size}] disconnected - ${id}`);
   },
   [Events.ObsScreen.Join]: ({ id }) => obsScreenSession.fallbackScreenshare.join(id),

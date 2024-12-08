@@ -1,6 +1,7 @@
 import { dataUriToBuffer } from 'data-uri-to-buffer';
 import { ObsScreenshare } from "../class/obs-screenshare.mjs";
 import { Room } from "../class/room.mjs";
+import { request } from './obs.mjs';
 import { sessionSocketService } from "./session-socket.service.mjs";
 
 const obsScreenshare = new ObsScreenshare(async (imageData) => {
@@ -11,8 +12,12 @@ const obsScreenshare = new ObsScreenshare(async (imageData) => {
 obsScreenshare.loop.TICK_RATE = 60;
 
 const room = new Room();
-const obsScreenshareRoom = new Room();
+// Automatically stop streaming when all clients have left
+room.on("end", () => {
+  request("StopStream");
+});
 
+const obsScreenshareRoom = new Room();
 obsScreenshareRoom.on("start", () => {
   obsScreenshare.start();
 });
