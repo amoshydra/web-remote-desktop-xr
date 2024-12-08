@@ -1,0 +1,32 @@
+{
+  "short_name": "WRDXR",
+  "name": "Web Remote Desktop XR",
+  "description": "Web Remote Desktop in Extended Reality (XR)",
+  "icons": [
+    {
+      "src": "/logo.svg?v=1",
+      "type": "image/svg+xml",
+      "sizes": "256x256"
+    }
+  ],
+  "id": "/?source=pwa",
+  "start_url": "/?source=pwa",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#ffffff",
+  "screenshots": [
+    {
+      "src": "/screenshots/001-viewport.jpg",
+      "type": "image/jpg",
+      "sizes": "1290x2796",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshots/002-controls.jpg",
+      "type": "image/jpg",
+      "sizes": "1290x2796",
+      "form_factor": "narrow"
+    }
+  ]
+}
