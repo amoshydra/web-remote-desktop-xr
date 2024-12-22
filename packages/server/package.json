@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@wrdxr-app/events": "link:../events",
+    "cors": "^2.8.5",
     "data-uri-to-buffer": "^6.0.2",
     "express": "^4.21.2",
     "nodemon": "^3.1.7",
@@ -13,6 +14,7 @@
     "vite-express": "^0.20.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.1"
   }

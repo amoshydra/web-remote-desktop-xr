@@ -2,7 +2,11 @@
 import { Events } from "@wrdxr-app/events";
 import { io } from "socket.io-client";
 
-const socket = io();
+
+// @TODO: make this changable from client side
+const websocketSessionUrl = "/"
+
+const socket = io(websocketSessionUrl);
 
 type ObsScreenOnOutputHandler = (buffer: ArrayBuffer) => void;
 

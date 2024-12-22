@@ -23,7 +23,11 @@ export class SessionSocket {
    * @param {Record<string, (socket: Socket, ...args: any[]) => void>} events 
    */
   init(server, events) {
-    const io = new Server(server);
+    const io = new Server(server, {
+      cors: {
+        origin: "*"
+      }
+    });
     this._io = io;
 
     io.on('connection', (socket) => {
