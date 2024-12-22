@@ -23,10 +23,23 @@ export class WrdxrObs {
   constructor(server) {
     // Setup rooms
     const room = new Room();
+
+    /**
+     * @type {NodeJS.Timeout}
+     */
+    let stopStreamRequestTimeout;
+
+    room.on("start", async () => {
+      clearTimeout(stopStreamRequestTimeout);
+    });
+
     // Automatically stop streaming when all clients have left
     room.on("end", async () => {
       try {
-        await obsWebSocket.request("StopStream");
+        // Stop streaming after 5 seconds
+        stopStreamRequestTimeout = setTimeout(async () => {
+          await obsWebSocket.request("StopStream");
+        }, 5000);
       } catch (error) {
         console.error(error);
       }
