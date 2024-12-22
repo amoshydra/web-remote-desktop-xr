@@ -12,7 +12,7 @@ export const MainScene = (props: MainSceneProps) => {
   return (
     <>
       <Controls
-        position={[-0.2, 0.85, -0.21]}
+        position={[-0.2, 0.9, -0.21]}
         webControlProps={webControlProps}
       />
       <hemisphereLight
