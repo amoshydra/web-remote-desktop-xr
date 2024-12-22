@@ -16,8 +16,6 @@
     "@react-three/fiber": "^8.17.10",
     "@react-three/xr": "^6.4.12",
     "@wrdxr-app/events": "link:../events",
-    "eventemitter3": "^5.0.1",
-    "obs-websocket-js": "^5.0.6",
     "ovenplayer": "^0.10.37",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

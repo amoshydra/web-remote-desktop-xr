@@ -39,7 +39,6 @@ export const ViewLogonSubViewport = (props: LogonSubViewProps) => {
             ? (
               <ViewportFallbackRenderer
                 className="w-full object-contain object-left-top"
-                obsProps={props.obsProps}
               />
             ) : (
               <CanvasVideoRenderer

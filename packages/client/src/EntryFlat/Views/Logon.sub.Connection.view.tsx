@@ -13,14 +13,6 @@ export const ViewLogonSubConnection = (props: LogonSubViewProps) => {
             <div>Is streaming</div>
             <div>{props.obsProps.isStreaming.toString()}</div>
           </div>
-          <div className="flex justify-between py-2">
-            <div>Output Settings</div>
-            <pre>{JSON.stringify(props.obsProps.outputSettings, null, 2)}</pre>
-          </div>
-          <div className="flex justify-between py-2">
-            <div>Profiles</div>
-            <pre>{JSON.stringify(props.obsProps.profiles, null, 2)}</pre>
-          </div>
         </div>
       </LogonContainer>
   );

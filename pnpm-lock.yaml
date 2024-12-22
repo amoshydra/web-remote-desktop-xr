@@ -63,12 +63,6 @@ importers:
       '@wrdxr-app/events':
         specifier: link:../events
         version: link:../events
-      eventemitter3:
-        specifier: ^5.0.1
-        version: 5.0.1
-      obs-websocket-js:
-        specifier: ^5.0.6
-        version: 5.0.6
       ovenplayer:
         specifier: ^0.10.37
         version: 0.10.37
@@ -117,9 +111,6 @@ importers:
       data-uri-to-buffer:
         specifier: ^6.0.2
         version: 6.0.2
-      eventemitter3:
-        specifier: ^5.0.1
-        version: 5.0.1
       express:
         specifier: ^4.21.2
         version: 4.21.2

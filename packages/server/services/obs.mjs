@@ -2,21 +2,32 @@ import OBSWebSocket from "obs-websocket-js";
 
 const obs = new OBSWebSocket();
 
-const url = "http://localhost:4455" || process.env.VITE_WRDXR_OBS_WEBSOCKET;
-const password = process.env.VITE_WRDXR_OBS_WEBSOCKET_PASSWORD;
+const url = process.env.WRDXR_OBS_WEBSOCKET;
+const password = process.env.WRDXR_OBS_WEBSOCKET_PASSWORD;
 
-const connectionPromise = obs.connect(url, password);
+const connectionPromise = obs.connect(url, password)
+  .then(() => {
+    return true;
+  })
+  .catch((error) => {
+    console.error(error);
+    return false;
+  })
+;
 
-/**
- * @type {(typeof obs)["call"]}
- */
-export const request = (...args) => connectionPromise.then(() => obs.call(...args))
+export const obsWebSocket = {
+  getIsConnected: () => connectionPromise,
+  /**
+   * @type {(typeof obs)["call"]}
+   */
+  request: (...args) => connectionPromise.then(() => obs.call(...args)),
 
-/**
- * @type {(typeof obs)["callBatch"]}
- */
-export const requestBatch = (...args) => connectionPromise.then(() => obs.callBatch(...args))
+  /**
+   * @type {(typeof obs)["callBatch"]}
+   */
+  requestBatch: (...args) => connectionPromise.then(() => obs.callBatch(...args)),
 
-export const on = obs.on;
+  on: obs.on.bind(obs),
 
-export const off = obs.off;
+  off: obs.off.bind(obs),
+};

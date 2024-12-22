@@ -1,4 +1,4 @@
-import { request } from "../services/obs.mjs";
+import { obsWebSocket } from "../services/obs.mjs";
 import { Loop } from "./loop.mjs";
 
 export class ObsScreenshare {
@@ -16,7 +16,12 @@ export class ObsScreenshare {
    */
   constructor(onUpdate) {
     this.loop = new Loop(this.updateScreenshot.bind(this));
-    this.updateSources();
+    this.updateSources()
+      .catch((error) => {
+        console.error(error)
+      })
+    ;
+
     /**
      * @type {(imageData: string) => void}
      */
@@ -24,9 +29,9 @@ export class ObsScreenshare {
   }
 
   async updateSources() {
-    const scene = await request("GetCurrentProgramScene");
+    const scene = await obsWebSocket.request("GetCurrentProgramScene");
 
-    const response = await request("GetSceneItemList", {
+    const response = await obsWebSocket.request("GetSceneItemList", {
       sceneName: scene.sceneName
     });
 
@@ -64,7 +69,7 @@ export class ObsScreenshare {
 
     this.maxParallelLoadCount += 1;
     try {
-      const { imageData } = await request("GetSourceScreenshot", screenshotRequest)
+      const { imageData } = await obsWebSocket.request("GetSourceScreenshot", screenshotRequest)
       this.onUpdate(imageData);
     } catch (error) {
       console.error(error);

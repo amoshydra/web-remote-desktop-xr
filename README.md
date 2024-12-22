@@ -103,6 +103,13 @@ Sample encoder settings for NVIDIA graphic card
 - Access Control using Signed Policy - https://airensoft.gitbook.io/ovenmediaengine/access-control/signedpolicy
 
 
+### OBS WebSocket Integration
+
+```ini
+WRDXR_OBS_WEBSOCKET=http://localhost:4455
+WRDXR_OBS_WEBSOCKET_PASSWORD=check-your-obs-setting
+```
+
 ## Usage
 
 ### Standalone Headset
@@ -142,9 +149,6 @@ You may create a `.env.local` with the following content:
 
 ```ini
 VITE_WRDXR_DEFAULT_FILE=wss://192.168.1.234:10083/app/stream
-
-VITE_WRDXR_OBS_WEBSOCKET=wss://192.168.1.234:10085
-VITE_WRDXR_OBS_WEBSOCKET_PASSWORD=check-your-obs-setting
 ```
 
 On your standalone headset, open a WebXR capable web browser and go to:  
