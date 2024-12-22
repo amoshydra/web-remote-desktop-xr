@@ -1,58 +1,57 @@
 import { Canvas, useThree } from "@react-three/fiber";
-import { createXRStore, XR } from "@react-three/xr";
-import { Ref, useEffect, useImperativeHandle, useState } from "react";
+import { useXRStore, XR } from "@react-three/xr";
+import { ReactNode, useEffect, useState } from "react";
 import { LinearToneMapping, Mesh } from "three";
 import { UseWebControlReturn } from "../components/WebControl";
 import { UseWrdxrSessionReturn } from "../hooks/useWrdxrSession";
+import { UseWrdxrXrStoreProps } from "../hooks/useWrdxrXrStore";
 import { MainScene } from "./MainScene";
-
-const store = createXRStore({
-  frameBufferScaling: 2,
-});
 
 export interface EntryRef {
   enter: (mode: "ar" | "vr") => void;
 }
 export interface EntryVirtualProps {
   webControlProps: UseWebControlReturn;
-  innerRef: Ref<EntryRef>;
+  wrdxrXrStoreProps: UseWrdxrXrStoreProps;
   wrdxrSessionProps: UseWrdxrSessionReturn;
 }
 
-export const EntryVirtual = ({ wrdxrSessionProps, webControlProps, innerRef }: EntryVirtualProps) => {
-  const [ready, setReady] = useState(false);
-
-  useImperativeHandle<EntryRef, EntryRef>(innerRef, () => ({
-    enter: (mode: "ar" | "vr") => {
-      setReady(true);
-      switch (mode) {
-        case "ar": {
-          store.enterXR("immersive-ar"); break;
-        }
-        case "vr": {
-          store.enterXR("immersive-vr"); break;
-        }
-      }
-    },
-  }));
+export const EntryVirtual = ({
+  wrdxrSessionProps,
+  webControlProps,
+  wrdxrXrStoreProps: UseWrdxrXrStoreProps,
+}: EntryVirtualProps) => {
+  const { store } = UseWrdxrXrStoreProps;
 
   return (
     <Canvas>
       <ToneMapping />
       <color attach="background" args={[0x2e2e2e]} />
       <XR store={store}>
-        {
-          ready && (
-            <MainScene
-              wrdxrSessionProps={wrdxrSessionProps}
-              webControlProps={webControlProps}
-            />
-          )
-        }
+        <XrChild>
+          <MainScene
+            wrdxrSessionProps={wrdxrSessionProps}
+            webControlProps={webControlProps}
+          />
+        </XrChild>
       </XR>
     </Canvas>
-  )
-}
+  );
+};
+
+const XrChild = ({ children }: { children: ReactNode }) => {
+  const store = useXRStore();
+  const [mode, setMode] = useState(store.getState().mode);
+  useEffect(() => {
+    store.subscribe((state) => {
+      setMode(state.mode);
+    });
+  }, [store]);
+
+  if (!mode) return null;
+
+  return children;
+};
 
 function ToneMapping() {
   const { gl, scene } = useThree(({ gl, scene }) => ({ gl, scene }));
