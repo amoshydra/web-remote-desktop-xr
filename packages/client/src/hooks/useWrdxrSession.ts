@@ -9,12 +9,12 @@ export interface WrdxrSettingsUrls<T = string> {
 }
 
 export interface UseWrdxrSessionReturn {
-  session: WrdxrSession,
-  isConnected: boolean,
-  error: Error | null,
+  session: WrdxrSession;
+  isConnected: boolean;
+  error: Error | null;
 
   settings: WrdxrSettings;
-};
+}
 
 export interface WrdxrSettings {
   urls: WrdxrSettingsUrls<string | null>;
@@ -28,29 +28,35 @@ export const useWrdxrSessionProps = () => {
   const handleConnect = useCallback(() => setIsConnected(true), []);
   const handleDisconnect = useCallback(() => setIsConnected(false), []);
 
-  const connect = useCallback((sessionUrls: WrdxrSettingsUrls) => {
-    wrdxrSessionProps.disconnect();
+  const connect = useCallback(
+    (sessionUrls: WrdxrSettingsUrls) => {
+      wrdxrSessionProps.disconnect();
 
-    setError(null);
-    setUrls(sessionUrls);
+      setError(null);
+      setUrls(sessionUrls);
 
-    wrdxrSessionProps.connect(sessionUrls.server);
-    wrdxrSessionProps.onConnected(handleConnect);
-    wrdxrSessionProps.onError(setError);
-    wrdxrSessionProps.onDisconnected(handleDisconnect);
-  }, []);
-
-  const wrdxr = useMemo<UseWrdxrSessionReturn>(() => ({
-    session: wrdxrSessionProps,
-    isConnected,
-    error,
-    settings: {
-      urls: {
-        server: urls?.server || null,
-        stream: urls?.stream || null,
-      },
+      wrdxrSessionProps.connect(sessionUrls.server);
+      wrdxrSessionProps.onConnected(handleConnect);
+      wrdxrSessionProps.onError(setError);
+      wrdxrSessionProps.onDisconnected(handleDisconnect);
     },
-  }), [urls, isConnected, error, urls])
+    [handleConnect, handleDisconnect],
+  );
+
+  const wrdxr = useMemo<UseWrdxrSessionReturn>(
+    () => ({
+      session: wrdxrSessionProps,
+      isConnected,
+      error,
+      settings: {
+        urls: {
+          server: urls?.server || null,
+          stream: urls?.stream || null,
+        },
+      },
+    }),
+    [urls, isConnected, error, urls],
+  );
 
   return [wrdxr, connect] as const;
-}
+};
