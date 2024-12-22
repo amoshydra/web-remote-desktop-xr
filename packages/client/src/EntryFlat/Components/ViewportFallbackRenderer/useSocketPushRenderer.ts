@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from "react";
-import { wrdxrSession } from "../../../services/session";
+import { UseWrdxrSessionReturn } from "../../../hooks/useWrdxrSession";
 
-export const useSocketPushRenderer = (canvas: HTMLCanvasElement | null, onDraw: (e: HTMLCanvasElement) => void) => {
+export const useSocketPushRenderer = (wrdxrSessionProps: UseWrdxrSessionReturn, canvas: HTMLCanvasElement | null, onDraw: (e: HTMLCanvasElement) => void) => {
   const maxParallelLoadCount = useRef(0);
 
   const canvasContext = useMemo(() => {
@@ -11,9 +11,9 @@ export const useSocketPushRenderer = (canvas: HTMLCanvasElement | null, onDraw: 
   }, [canvas])
 
   useEffect(() => {
-    wrdxrSession.obsScreen.join();
+    wrdxrSessionProps.session.obsScreen.join();
     return () => {
-      wrdxrSession.obsScreen.exit();
+      wrdxrSessionProps.session.obsScreen.exit();
     }
   }, []);
 
@@ -41,9 +41,9 @@ export const useSocketPushRenderer = (canvas: HTMLCanvasElement | null, onDraw: 
           maxParallelLoadCount.current -= 1;
         })
     }
-    wrdxrSession.obsScreen.onOutput(handleDraw)
+    wrdxrSessionProps.session.obsScreen.onOutput(handleDraw)
     return () => {
-      wrdxrSession.obsScreen.offOutput(handleDraw);
+      wrdxrSessionProps.session.obsScreen.offOutput(handleDraw);
     }
   }, [onDraw, canvasContext]);
 }

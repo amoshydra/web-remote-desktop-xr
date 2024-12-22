@@ -38,6 +38,7 @@ export const ViewLogonSubViewport = (props: LogonSubViewProps) => {
           isFallbackActive
             ? (
               <ViewportFallbackRenderer
+                wrdxrSessionProps={props.wrdxrSessionProps}
                 className="w-full object-contain object-left-top"
               />
             ) : (

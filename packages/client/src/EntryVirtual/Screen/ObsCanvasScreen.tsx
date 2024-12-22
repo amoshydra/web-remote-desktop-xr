@@ -2,10 +2,13 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import { CanvasTexture, LinearFilter, SRGBColorSpace } from "three";
 import { useSocketPushRenderer } from "../../EntryFlat/Components/ViewportFallbackRenderer/useSocketPushRenderer";
+import { UseWrdxrSessionReturn } from "../../hooks/useWrdxrSession";
 
-export interface ObsCanvasScreenProps {}
+export interface ObsCanvasScreenProps {
+  wrdxrSessionProps: UseWrdxrSessionReturn
+}
 
-export const ObsCanvasScreen = (_p: ObsCanvasScreenProps) => {
+export const ObsCanvasScreen = (props: ObsCanvasScreenProps) => {
   const textureRef = useRef<CanvasTexture | null>(null);
   const [canvasWidth, setCanvasWidth] = useState(1000);
   const [canvasHeight, setCanvasHeight] = useState(1000);
@@ -27,7 +30,7 @@ export const ObsCanvasScreen = (_p: ObsCanvasScreenProps) => {
     texture.needsUpdate = true;
   }, []);
 
-  useSocketPushRenderer(canvasElement, draw);
+  useSocketPushRenderer(props.wrdxrSessionProps, canvasElement, draw);
 
   if (!ready) return false;
 

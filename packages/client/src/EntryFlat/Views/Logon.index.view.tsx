@@ -6,6 +6,7 @@ import { memoryLocation } from "wouter/memory-location";
 import { useWebControl } from '../../components/WebControl';
 import { EntryRef } from '../../EntryVirtual/EntryVirtual';
 import { useObs } from '../../hooks/useObs';
+import { UseWrdxrSessionReturn } from '../../hooks/useWrdxrSession';
 import { AppShell } from '../Components/AppShell';
 import { Services } from '../Components/Services/Services';
 import { Sidebar } from '../Components/Sidebar';
@@ -16,18 +17,21 @@ import { ViewLogonSubControls } from './Logon.sub.Controls.view';
 import { ViewLogonSubSettings } from './Logon.sub.Settings.view';
 import { ViewLogonSubViewport } from './Logon.sub.Viewport.view';
 
-export interface ViewLogonProps { }
+export interface ViewLogonProps {
+  wrdxrSessionProps: UseWrdxrSessionReturn;
+}
 
 const { hook, navigate } = memoryLocation();
 
-export const ViewLogon = () => {
+export const ViewLogon = ({ wrdxrSessionProps }: ViewLogonProps) => {
   const xrStoreRef = useRef<EntryRef>(null);
-  const webControlProps = useWebControl();
-  const obsProps = useObs();
+  const webControlProps = useWebControl(wrdxrSessionProps);
+  const obsProps = useObs(wrdxrSessionProps);
 
   return (
     <>
       <Services
+        wrdxrSessionProps={wrdxrSessionProps}
         webControlProps={webControlProps}
         xrStoreRef={xrStoreRef}
       />
@@ -83,6 +87,7 @@ export const ViewLogon = () => {
                 <Route path={path} key={path}>
                   <ViewLogonSubComponent
                     obsProps={obsProps}
+                    wrdxrSessionProps={wrdxrSessionProps}
                     webControlProps={webControlProps}
                   />
                 </Route>

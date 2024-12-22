@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { wrdxrSession } from "../services/session";
+import { UseWrdxrSessionReturn } from "./useWrdxrSession";
 
 export interface UseObsReturn {
   isConnected: boolean;
@@ -12,24 +12,28 @@ export interface UseObsReturn {
 }
 
 
+const getInitialData = () => ({
+  isConnected: false,
+  isStreaming: false,
+});
 
-export const useObs = (): UseObsReturn => {
+export const useObs = (wrdxrSessionProps: UseWrdxrSessionReturn): UseObsReturn => {
   const data = useSocketData(
-    wrdxrSession.obs.requestData,
-    wrdxrSession.obs.onData,
-    wrdxrSession.obs.offData,
-    {
-      isConnected: false,
-      isStreaming: false,
-    }
+    wrdxrSessionProps.session.obs.requestData,
+    wrdxrSessionProps.session.obs.onData,
+    wrdxrSessionProps.session.obs.offData,
+    getInitialData(),
   );
+
+  const renderData = wrdxrSessionProps.isConnected ? data : getInitialData();
+
   return {
-    isConnected: data.isConnected,
-    isStreaming: data.isStreaming,
+    isConnected: renderData.isConnected,
+    isStreaming: renderData.isStreaming,
     api: {
       stream: {
         toggle() {
-          wrdxrSession.obs.stream.toggle();
+          wrdxrSessionProps.session.obs.stream.toggle();
         }
       }
     }

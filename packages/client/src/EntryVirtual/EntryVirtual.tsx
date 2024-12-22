@@ -3,6 +3,7 @@ import { createXRStore, XR } from "@react-three/xr";
 import { Ref, useEffect, useImperativeHandle, useState } from "react";
 import { LinearToneMapping, Mesh } from "three";
 import { UseWebControlReturn } from "../components/WebControl";
+import { UseWrdxrSessionReturn } from "../hooks/useWrdxrSession";
 import { MainScene } from "./MainScene";
 
 const store = createXRStore({
@@ -15,9 +16,10 @@ export interface EntryRef {
 export interface EntryVirtualProps {
   webControlProps: UseWebControlReturn;
   innerRef: Ref<EntryRef>;
+  wrdxrSessionProps: UseWrdxrSessionReturn;
 }
 
-export const EntryVirtual = ({ webControlProps, innerRef }: EntryVirtualProps) => {
+export const EntryVirtual = ({ wrdxrSessionProps, webControlProps, innerRef }: EntryVirtualProps) => {
   const [ready, setReady] = useState(false);
 
   useImperativeHandle<EntryRef, EntryRef>(innerRef, () => ({
@@ -42,6 +44,7 @@ export const EntryVirtual = ({ webControlProps, innerRef }: EntryVirtualProps) =
         {
           ready && (
             <MainScene
+              wrdxrSessionProps={wrdxrSessionProps}
               webControlProps={webControlProps}
             />
           )

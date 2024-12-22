@@ -1,29 +1,8 @@
 
 import { Events } from "@wrdxr-app/events";
-import { io } from "socket.io-client";
-
-
-// @TODO: make this changable from client side
-const websocketSessionUrl = "/"
-
-const socket = io(websocketSessionUrl);
+import { io, Socket } from "socket.io-client";
 
 type ObsScreenOnOutputHandler = (buffer: ArrayBuffer) => void;
-
-const obsScreen = {
-  join() {
-    socket.emit(Events.ObsScreen.Join);
-  },
-  exit() {
-    socket.emit(Events.ObsScreen.Exit);
-  },
-  onOutput(handler: ObsScreenOnOutputHandler) {
-    socket.on(Events.ObsScreen.Output, handler)
-  },
-  offOutput(handler: ObsScreenOnOutputHandler) {
-    socket.off(Events.ObsScreen.Output, handler)
-  },
-}
 
 interface ObsOnConnectHandlerData {
   isConnected: boolean;
@@ -31,22 +10,70 @@ interface ObsOnConnectHandlerData {
 }
 type ObsOnConnectHandler = (data: ObsOnConnectHandlerData) => void;
 
-const obs = {
-  stream: {
-    toggle: () => socket.emit(Events.Obs.Stream.Toggle),
-  },
-  requestData() {
-    socket.emit(Events.Obs.GetData);
-  },
-  onData(handler: ObsOnConnectHandler) {
-    socket.on(Events.Obs.Data, handler);
-  },
-  offData(handler: ObsOnConnectHandler) {
-    socket.off(Events.Obs.Data, handler);
-  },
-}
 
-export const wrdxrSession = {
-  obs,
-  obsScreen,
-};
+export class WrdxrSession {
+  public obs;
+  public obsScreen;
+
+  private _socket: Socket | null = null
+
+  constructor() {
+    this.obsScreen = {
+      join: () => {
+        this.socket.emit(Events.ObsScreen.Join);
+      },
+      exit: () => {
+        this.socket.emit(Events.ObsScreen.Exit);
+      },
+      onOutput: (handler: ObsScreenOnOutputHandler) => {
+        this.socket.on(Events.ObsScreen.Output, handler)
+      },
+      offOutput: (handler: ObsScreenOnOutputHandler) => {
+        this.socket.off(Events.ObsScreen.Output, handler)
+      },
+    }
+    
+    this.obs = {
+      stream: {
+        toggle: () => this.socket.emit(Events.Obs.Stream.Toggle),
+      },
+      requestData: () => {
+        this.socket.emit(Events.Obs.GetData);
+      },
+      onData: (handler: ObsOnConnectHandler) => {
+        this.socket.on(Events.Obs.Data, handler);
+      },
+      offData: (handler: ObsOnConnectHandler) => {
+        this.socket.off(Events.Obs.Data, handler);
+      },
+    }
+  }
+
+  get connected() {
+    return this._socket?.connected || false;
+  }
+
+  connect(url = "/") {
+    this._socket = io(url);
+  }
+  disconnect() {
+    this._socket?.disconnect();
+    this._socket = null;
+  }
+
+  onConnected(handler: () => void) {
+    this.socket.on("connect", handler);
+  }
+
+  onError(handler: (error: Error) => void) {
+    this.socket.on("connect_error", handler);
+  };
+
+  onDisconnected(handler: () => void) {
+    this.socket.on("disconnect", handler);
+  }
+
+  private get socket() {
+    return this._socket as Socket;
+  }
+}

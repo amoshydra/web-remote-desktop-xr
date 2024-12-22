@@ -1,13 +1,15 @@
 import { UseWebControlReturn } from "../components/WebControl";
+import { UseWrdxrSessionReturn } from "../hooks/useWrdxrSession";
 import { Controls } from "./Controls";
 import { Screen } from "./Screen/Screen";
 
 export interface MainSceneProps {
   webControlProps: UseWebControlReturn;
+  wrdxrSessionProps: UseWrdxrSessionReturn;
 }
 
 export const MainScene = (props: MainSceneProps) => {
-  const { webControlProps } = props;
+  const { webControlProps, wrdxrSessionProps } = props;
 
   return (
     <>
@@ -22,6 +24,7 @@ export const MainScene = (props: MainSceneProps) => {
         intensity={1}
       />
       <Screen
+        wrdxrSessionProps={wrdxrSessionProps}
         webControlProps={webControlProps}
       />
     </>

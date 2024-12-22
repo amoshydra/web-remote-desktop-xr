@@ -1,6 +1,7 @@
 import { OvenPlayerInstance } from "ovenplayer";
 import { Dispatch, useCallback, useMemo, useState } from "react";
-import { mutedInitailizer, posXInitailizer, posYInitailizer, posZInitailizer, scaleInitailizer, sourceInitializer } from "../services/initializers";
+import { UseWrdxrSessionReturn } from "../hooks/useWrdxrSession";
+import { mutedInitailizer, posXInitailizer, posYInitailizer, posZInitailizer, scaleInitailizer } from "../services/initializers";
 
 export interface WebControlProps extends UseWebControlReturn {
 }
@@ -42,7 +43,7 @@ const useQueryState = <T,>(initializer: { get: () => T; set: (v: T) => void }) =
   return [value, wrappedDispatcher] as const;
 };
 
-export const useWebControl = (): UseWebControlReturn => {
+export const useWebControl = (wrdxrSessionProps: UseWrdxrSessionReturn): UseWebControlReturn => {
   const [resetKey, setRefreshKey] = useState(Date.now());
 
   const [player, setPlayer] = useState<OvenPlayerInstance | null>(null);
@@ -52,7 +53,8 @@ export const useWebControl = (): UseWebControlReturn => {
   const [y, setY] = useQueryState(posYInitailizer);
   const [z, setZ] = useQueryState(posZInitailizer);
   const [muted, setMuted] = useQueryState(mutedInitailizer);
-  const [file] = useQueryState(sourceInitializer);
+
+  const file = wrdxrSessionProps.settings.urls.stream || "";
 
   const computedFile = useMemo(() => {
     const sourceFile = new URL(file);
