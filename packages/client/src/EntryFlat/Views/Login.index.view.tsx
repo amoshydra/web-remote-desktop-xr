@@ -15,9 +15,9 @@ export interface ViewLoginProps {
 export const ViewLogin = (props: ViewLoginProps) => {
   const { onConnectionStart, error: propsError } = props;
   const [error, setError] = useState<Error | null>(null);
-  const [serverUrl, setServerUrl] = useState(ConfigStorage.getServerUrl());
-  const [streamUrl, setStreamUrl] = useState(ConfigStorage.getStreamUrl());
-  const [remember, setRemember] = useState(ConfigStorage.getRemember());
+  const [serverUrl, setServerUrl] = useState(ConfigStorage.serverUrl.get());
+  const [streamUrl, setStreamUrl] = useState(ConfigStorage.streamUrl.get());
+  const [remember, setRemember] = useState(ConfigStorage.remember.get());
 
   const initialRemember = useRef(remember);
 
@@ -46,9 +46,9 @@ export const ViewLogin = (props: ViewLoginProps) => {
         stream: streamUrl,
       });
       if (remember) {
-        ConfigStorage.setRemember(remember);
-        ConfigStorage.setServerUrl(serverUrl);
-        ConfigStorage.setStreamUrl(streamUrl);
+        ConfigStorage.remember.set(remember);
+        ConfigStorage.serverUrl.set(serverUrl);
+        ConfigStorage.streamUrl.set(streamUrl);
       }
     } catch (e) {
       setError(e as Error);

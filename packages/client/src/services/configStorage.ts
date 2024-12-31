@@ -1,11 +1,17 @@
+import { createConfigStore } from "../class/ConfigStorage";
 import { WRDXR_DEFAULT_FILE } from "./environment";
 
-export const ConfigStorage = {
-  getServerUrl: () => localStorage.getItem("serverUrl") || location.origin,
-  getStreamUrl: () => localStorage.getItem("streamUrl") || WRDXR_DEFAULT_FILE,
-  setServerUrl: (value: string) => localStorage.setItem("serverUrl", value),
-  setStreamUrl: (value: string) => localStorage.setItem("streamUrl", value),
-  getRemember: () => localStorage.getItem("remember") === "true",
-  setRemember: (value: boolean) =>
-    localStorage.setItem("remember", value ? "true" : "false"),
-};
+export const ConfigStorage = createConfigStore({
+  serverUrl: {
+    type: "string",
+    defaultValue: location.origin,
+  },
+  streamUrl: {
+    type: "string",
+    defaultValue: WRDXR_DEFAULT_FILE,
+  },
+  remember: {
+    type: "boolean",
+    defaultValue: false as boolean,
+  },
+});

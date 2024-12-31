@@ -11,7 +11,7 @@ export const ViewLogonSubSettings = (_props: LogonSubViewProps) => {
           <p>Disconnect from server and go back to the login page</p>
           <Button
             onClick={() => {
-              ConfigStorage.setRemember(false);
+              ConfigStorage.remember.set(false);
               location.reload();
             }}
             className="bg-slate-200 hover:bg-slate-300 active:bg-slate-400 place-self-end"
