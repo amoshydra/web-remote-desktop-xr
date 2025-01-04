@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import { DoubleSide, LinearFilter, SRGBColorSpace } from "three";
 import { useCachedDimension } from "../../hooks/useCachedDimension";
+import { CurvedPlaneGeometryMesh } from "../XRComponents/CurvedPlaneGeometryMesh";
 
 export interface VideoScreenProps {
   video: HTMLVideoElement | undefined;
@@ -26,10 +27,13 @@ interface VideoPlaneProps {
 
 const VideoPlane = (props: VideoPlaneProps) => {
   const { isPlaying, video } = props;
-  const dimension = useCachedDimension(video);
+  const [width, height] = useCachedDimension(video);
   return (
-    <mesh>
-      <planeGeometry args={dimension} />
+    <CurvedPlaneGeometryMesh
+      width={width}
+      height={height}
+      radius={2}
+    >
       <meshStandardMaterial
         emissiveIntensity={isPlaying ? 1 : 0.5}
         emissive={isPlaying ? "white" : "maroon"}
@@ -45,7 +49,7 @@ const VideoPlane = (props: VideoPlaneProps) => {
           attach="emissiveMap"
         />
       </meshStandardMaterial>
-    </mesh>
+    </CurvedPlaneGeometryMesh>
   );
 }
 
